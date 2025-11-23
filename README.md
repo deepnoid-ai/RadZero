@@ -57,8 +57,7 @@ RadZero can perform **zero-shot classification / grounding / segmentation for ch
 using the **RadZero model** on 🤗 <a href="https://huggingface.co/Deepnoid/RadZero" target="_blank">Hugging Face</a>.
 
 
-```
-# Deepnoid/RadZero/inference.py
+```python
 import warnings
 
 import torch
