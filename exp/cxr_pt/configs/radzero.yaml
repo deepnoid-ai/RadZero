@@ -1,0 +1,72 @@
+train:
+  per_device_train_batch_size: 64
+  per_device_eval_batch_size: 64
+  dataloader_num_workers: 4
+  num_train_epochs: 20
+  learning_rate: 1e-4
+  bf16: True
+  bf16_full_eval: True
+
+model:
+  model_class_name: CxrAlignModel
+
+  config_class_name: CxrAlignConfig
+
+  model_config:
+    vision_config:
+      model_type: dinov2
+      pretrained_name_or_path: "StanfordAIMI/dinov2-base-xray-224"
+      img_size: 518
+
+    text_config:
+      use_text_projection: False
+      # mpnet
+      model_type: mpnet
+      pretrained_name_or_path: "sentence-transformers/all-mpnet-base-v2"
+      pretrained_tokenizer_name_or_path: "sentence-transformers/all-mpnet-base-v2"
+      use_cls_token: False
+    
+    align_transformer_config:
+      model_type: align_transformer
+      hidden_size: 768
+      num_hidden_layers: 2
+      projector_config: null
+      use_layer_norm: False
+
+    loss:
+      apply: [RadZeroLoss]
+      ratio: [1.0]
+      RadZeroLoss:
+        hidden_dim: 768
+        mpnce_row_sum: False
+        mpnce_col_sum: False
+        attn_temperature: null
+        loss_temperature: 0.07
+        text_features_l2_norm: False
+        sim_op: cos  # dot, cos
+
+    compute_logits_type: radzero
+
+  module_to_update: [align_transformer, text_model, loss_fns]
+
+  # load model through from_pretrained
+  pretrained_ckpt: null
+
+  # load adpater file
+  adapter_ckpt: null
+
+  lora_config:
+    use_lora: False
+    target_modules: null # specify target modules
+    inference_mode: False
+    lora_r: 8
+    lora_alpha: 32
+    lora_dropout: 0.05
+
+  dtype: torch.bfloat16
+
+experiment:
+  name: radzero
+  user: anonymous
+  early_stopping_patience: 5
+  resume_from_checkpoint: False

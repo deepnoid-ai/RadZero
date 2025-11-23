@@ -1,0 +1,65 @@
+train:
+  learning_rate: 1e-4
+  per_device_train_batch_size: 32
+  per_device_eval_batch_size: 32
+  gradient_accumulation_steps: 1
+  gradient_checkpointing: False
+  ddp_find_unused_parameters: True
+  gradient_checkpointing_kwargs: { "use_reentrant": False }
+  dataloader_num_workers: 4
+  num_train_epochs: 10
+  weight_decay: 0.05
+  max_grad_norm: 1.0
+  evaluation_strategy: epoch
+  eval_steps: 1
+  save_strategy: epoch
+  save_total_limit: null
+  metric_for_best_model: eval_loss
+  load_best_model_at_end: True
+  lr_scheduler_type: cosine
+  warmup_steps: 50
+  logging_steps: 10
+  label_names: []
+  report_to: wandb
+  remove_unused_columns: False
+  seed: 42
+  full_determinism: False # ensuring reproducible results in distributed training. Important: this will negatively impact the performance, so only use it for debugging.
+  ddp_timeout: 36000
+
+experiment:
+  project: pt
+  name: dev
+  user: debug
+  output_root_dir: null
+  early_stopping_patience: 10
+  resume_from_checkpoint: False
+
+loss: null
+
+dataset:
+  data_root: null
+
+  train: [MIMIC_CXR_train]
+  eval: [MIMIC_CXR_eval]
+  test: null
+
+  MIMIC_CXR_train: MIMIC-CXR/preprocess/v12.2/train.json
+  MIMIC_CXR_eval: MIMIC-CXR/preprocess/v12.2/validate.json
+
+  rm_mscxr: True
+  MS_CXR_test: MS-CXR-0.1/preprocess/v2.0/test.json
+
+  use_frontal_view_only: False
+  use_radgrpah_key_phrase: False
+  use_negative_phrases: False
+
+  augmentation:
+    apply: False
+
+inference:
+  batch_size: 64
+  num_workers: 4
+  cls_dataset: ["OpenI", "PadChest", "ChestXray14", "Chexpert", "ChestXDet10"] # "OpenI","PadChest","ChestXray14","Chexpert","ChestXDet10"
+  det_dataset: ["ChestXDet10", "MS-CXR"] # "ChestXDet10", "MS-CXR"
+  seg_dataset: ["SIIM", "RSNA"] # "SIIM", "RSNA"
+  compute_pixel_level_auroc: False
