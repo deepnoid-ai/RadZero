@@ -120,10 +120,15 @@ if __name__ == "__main__":
   - Hugging Face: [`Deepnoid/RadZero` – `data/MIMIC-CXR`](https://huggingface.co/Deepnoid/RadZero/tree/main/data/MIMIC-CXR)
 
 ### Run Command
-Use the command below to start training the RadZero model.
+1. Set the appropriate data and output paths for your environment in `exp/cxr_pt/configs/paths.yaml`.
+
+Make sure to update these fields to reflect where your dataset is stored and where experiment outputs should be saved.
+
+2. Use the command below to start training the RadZero model.
 
 ```
-torchrun --nproc_per_node=4 --nnodes=1 exp/cxr_pt/pt/run.py --add_cfg_list radzero
+cd RadZero
+PYTHONPATH=. torchrun --nproc_per_node=4 --nnodes=1 exp/cxr_pt/run.py --add_cfg_list radzero paths
 ```
 
 ## References
