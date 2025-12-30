@@ -126,6 +126,8 @@ if __name__ == "__main__":
 All evaluation benchmarks used in the paper are provided under the `data/` directory of the Hugging Face repo:  
 [`Deepnoid/RadZero` – `data/`](https://huggingface.co/Deepnoid/RadZero/tree/main/data)
 
+The sources for the preprocessed data can be found: [link](https://huggingface.co/Deepnoid/RadZero/blob/main/data/README.md)
+
 - **Zero-shot classification datasets**
   - `OpenI`
   - `PadChest`
