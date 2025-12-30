@@ -38,7 +38,7 @@ alignment. (a) While traditional attention maps inevitably exhibit high values a
 
 
 ## Updates
-- `2024-11-23`: Code and model checkpoints of RadZero have been released. 🚀
+- `2025-11-23`: Code and model checkpoints of RadZero have been released. 🚀
 - `2025-10-19`: **RadZero3D** (an extension of RadZero to Chest CT) has been published at the [ICCV 2025 VLM3D Workshop](https://vlm3dchallenge.com/workshop/)! 🎉 You can read the paper [here](https://openaccess.thecvf.com/content/ICCV2025W/VLM3D/papers/Park_RadZero3D_Bridging_Self-Supervised_Video_Models_and_Medical_Vision-Language_Alignment_for_ICCVW_2025_paper.pdf).
 - `2025-09-18`: **RadZero** has been accepted to NeurIPS 2025! 🎉 (5,290 / 21,575 = 24.52% acceptance rate)
 

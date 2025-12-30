@@ -188,7 +188,7 @@ def eval_segmentation_siim(
 
         # image
         image = read_from_dicom(
-            os.path.join(data_root_dir, imgid_df["ours_path"].tolist()[0])
+            os.path.join(data_root_dir, imgid_df["dicom_path"].tolist()[0])
         )
         (width, height) = image.size
 
