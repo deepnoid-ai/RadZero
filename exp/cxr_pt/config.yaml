@@ -43,11 +43,11 @@ dataset:
   eval: [MIMIC_CXR_eval]
   test: null
 
-  MIMIC_CXR_train: MIMIC-CXR/preprocess/train.json
-  MIMIC_CXR_eval: MIMIC-CXR/preprocess/validate.json
+  MIMIC_CXR_train: MIMIC-CXR/train.json
+  MIMIC_CXR_eval: MIMIC-CXR/validate.json
 
   rm_mscxr: True
-  MS_CXR_test: MS-CXR-0.1/preprocess/test.json
+  MS_CXR_test: MS-CXR/test.json
 
   use_frontal_view_only: False
 

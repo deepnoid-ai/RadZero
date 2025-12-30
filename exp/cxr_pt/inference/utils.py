@@ -111,67 +111,67 @@ def get_infer_dirs(data_root_dir):
         "OpenI": {
             "image_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/OpenI/openi_multi_label_image.csv",
+                "OpenI/openi_multi_label_image.csv",
             ),
             "text_path": os.path.join(
-                data_root_dir, "CarZero/preprocess/OpenI/openi_multi_label_text.json"
+                data_root_dir, "OpenI/openi_multi_label_text.json"
             ),
         },
         "PadChest": {
             "image_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/PadChest/padchest_multi_label_image.csv",
+                "PadChest/padchest_multi_label_image.csv",
             ),
             "text_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/PadChest/padchest_multi_label_text.json",
+                "PadChest/padchest_multi_label_text.json",
             ),
         },
         "ChestXray14": {
             "image_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/ChestXray14/chestxray14_test_image.csv",
+                "ChestXray14/chestxray14_test_image.csv",
             ),
             "text_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/ChestXray14/chestxray14_test_text.json",
+                "ChestXray14/chestxray14_test_text.json",
             ),
         },
         "Chexpert": {
             "image_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/Chexpert/chexpert5_test_image.csv",
+                "Chexpert/chexpert5_test_image.csv",
             ),
             "text_path": os.path.join(
-                data_root_dir, "CarZero/preprocess/Chexpert/chexpert5_test_text.json"
+                data_root_dir, "Chexpert/chexpert5_test_text.json"
             ),
         },
         "ChestXDet10": {
             "image_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/ChestXDet10/chestXDet10_test_image.csv",
+                "ChestXDet10/chestXDet10_test_image.csv",
             ),
             "text_path": os.path.join(
                 data_root_dir,
-                "CarZero/preprocess/ChestXDet10/chestXDet10_test_text.json",
+                "ChestXDet10/chestXDet10_test_text.json",
             ),
         },
         "MS-CXR": {
             "data_path": os.path.join(
                 data_root_dir,
-                "MS-CXR-0.1/preprocess/test.json",
+                "MS-CXR/test.json",
             )
         },
         "SIIM": {
             "data_path": os.path.join(
                 data_root_dir,
-                "external/MGCA/siim/test.csv",
+                "SIIM/test.csv",
             ),
         },
         "RSNA": {
             "data_path": os.path.join(
                 data_root_dir,
-                "RSNA-pneumonia/medklip/test.csv",
+                "RSNA/test.csv",
             ),
         },
     }
@@ -234,7 +234,7 @@ def cal_performance(similarities, data_root_dir, sel_dataset):
             macro_prc,
         ) = tripple_openi_rusult_merge(
             similarities,
-            os.path.join(data_root_dir, "CarZero/preprocess/OpenI/custom.csv"),
+            os.path.join(data_root_dir, "OpenI/custom.csv"),
         )
         performance["OpenI"] = {
             "Head AUC": head_macro_auc,
@@ -258,9 +258,7 @@ def cal_performance(similarities, data_root_dir, sel_dataset):
             macro_auprc_20,
         ) = tripple_padchest_rusult_merge(
             similarities,
-            os.path.join(
-                data_root_dir, "CarZero/preprocess/PadChest/manual_image.json"
-            ),
+            os.path.join(data_root_dir, "PadChest/manual_image.json"),
         )
         performance["PadChest"] = {
             "Head AUC": head_macro_auc,
@@ -277,9 +275,7 @@ def cal_performance(similarities, data_root_dir, sel_dataset):
         print("ChestXray14")
         total_macro_auc, micro_prc, macro_prc = triple_Chexpert14_result(
             similarities,
-            os.path.join(
-                data_root_dir, "CarZero/preprocess/ChestXray14/test_list_ours.txt"
-            ),
+            os.path.join(data_root_dir, "ChestXray14/test_list.txt"),
         )
         performance["ChestXray14"] = {
             "Total AUC": total_macro_auc,
@@ -291,9 +287,7 @@ def cal_performance(similarities, data_root_dir, sel_dataset):
         print("Chexpert")
         total_macro_auc, micro_prc, macro_prc = triple_Chexpert5_result(
             similarities,
-            os.path.join(
-                data_root_dir, "CarZero/preprocess/Chexpert/test_labels_ours.csv"
-            ),
+            os.path.join(data_root_dir, "Chexpert/test_labels.csv"),
         )
         performance["Chexpert"] = {
             "Total AUC": total_macro_auc,
@@ -305,7 +299,7 @@ def cal_performance(similarities, data_root_dir, sel_dataset):
         print("ChestXDet10")
         total_macro_auc, micro_prc, macro_prc = triple_ChestXDet10_result(
             similarities,
-            os.path.join(data_root_dir, "CarZero/preprocess/ChestXDet10/test.json"),
+            os.path.join(data_root_dir, "ChestXDet10/test.json"),
         )
         performance["ChestXDet10"] = {
             "Total AUC": total_macro_auc,
