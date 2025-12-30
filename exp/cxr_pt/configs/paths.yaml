@@ -1,0 +1,11 @@
+# set custom path here
+
+experiment:
+  output_root_dir: /data/experiments
+
+dataset:
+  data_root: /data/datasets
+
+model:
+  model_config:
+    pretrained_dir: /data/pretrained
