@@ -1,13 +1,10 @@
 import os
 import random
-from functools import partial
 
-import cv2
 import numpy as np
 import PIL
 import torch
 from datasets import DatasetDict, Image
-from nltk.tokenize import sent_tokenize
 from torchvision.transforms import Compose
 from tqdm import tqdm
 from transformers import BertTokenizerFast, MPNetTokenizerFast
@@ -15,7 +12,6 @@ from transformers import BertTokenizerFast, MPNetTokenizerFast
 from common.dataset import WithMissingValueDataset
 from common.trainer import logger
 from common.utils import load_json
-from exp.augmentation import augmemtation_transforms
 from exp.cxr_pt.model.processing import M3AEImageProcessor
 
 
@@ -24,12 +20,7 @@ def input_json_file_load(json_path, data_root, train_flag, **kwargs):
     input_json = load_json(os.path.join(data_root, json_path))
 
     use_frontal_view_only = kwargs.get("use_frontal_view_only", False)
-    use_radgrpah_key_phrase = kwargs.get("use_radgrpah_key_phrase", False)
-    use_dicom_path = kwargs.get("use_dicom_path", False)
     dataset_name = json_path.split("/")[0]
-
-    if "carzero" in json_path:
-        dataset_name = "MIMIC-CXR-CARZERO"
 
     data_list = list()
     for data in tqdm(input_json):
@@ -48,85 +39,18 @@ def input_json_file_load(json_path, data_root, train_flag, **kwargs):
                 continue
 
             entry = {}
-            if use_dicom_path:
-                if data.get("original_dicom_id"):
-                    image_path = os.path.join(data_root, data["original_dicom_id"])
-                elif data.get("dicom_path"):
-                    image_path = os.path.join(data_root, data["dicom_path"])
-                else:
-                    raise NotImplementedError
-            else:
-                image_path = os.path.join(
-                    data_root, "MIMIC-CXR", "images", data["dicom_id"]
-                )
+            image_path = os.path.join(
+                data_root, "MIMIC-CXR", "images", data["dicom_id"]
+            )
             entry["image"] = image_path
 
-            # if data.get("findings"):
-            #     entry["sentences"] = sent_tokenize(data["findings"])
-            #     entry["findings"] = data["findings"]
-
-            # if data.get("findings_clean"):
-            #     # entry["sentences_clean"] = sent_tokenize(data["findings_clean"])
-            #     entry["findings_clean"] = data["findings_clean"]
-            # else:
-            #     continue
-
             if data.get("key_phrases"):
-                if use_radgrpah_key_phrase:
-                    entry["key_phrases"] = [
-                        i for i in data["radgraph_key_phrase"] if i.strip()
-                    ]
-                else:
-                    entry["key_phrases"] = [i for i in data["key_phrases"] if i.strip()]
+                entry["key_phrases"] = [i for i in data["key_phrases"] if i.strip()]
             else:
                 continue
 
-            if data.get("negative_existence"):
-                entry["negative_existence"] = [
-                    i for i in data["negative_existence"] if i.strip()
-                ]
-            else:
-                entry["negative_existence"] = []
-
-            if data.get("negative_position"):
-                entry["negative_position"] = [
-                    i for i in data["negative_position"] if i.strip()
-                ]
-            else:
-                entry["negative_position"] = []
-
-            if data.get("negative_finding"):
-                entry["negative_finding"] = [
-                    i for i in data["negative_finding"] if i.strip()
-                ]
-            else:
-                entry["negative_finding"] = []
-
-            if kwargs.get("use_negative_phrases"):
-                if not (
-                    entry["negative_existence"]
-                    + entry["negative_position"]
-                    + entry["negative_finding"]
-                ):
-                    continue
-
             entry["train"] = train_flag
 
-            data_list.append(entry)
-
-        elif dataset_name == "MIMIC-CXR-CARZERO":
-            entry = {}
-            if use_dicom_path:
-                image_path = os.path.join(data_root, data["original_dicom_id"])
-            else:
-                image_path = os.path.join(
-                    data_root, "MIMIC-CXR", "images", data["dicom_id"]
-                )
-            entry["image"] = image_path
-
-            entry["key_phrases"] = [i for i in data["key_phrases"] if i.strip()]
-
-            entry["train"] = train_flag
             data_list.append(entry)
 
     # remove MS-CXR from the training dataset
@@ -183,12 +107,6 @@ def load_datasets(cfg, train, inference):
 
     dataset = dataset.cast_column("image", Image())
 
-    if cfg["augmentation"]["apply"]:
-        logger.info(f"augmentation: {cfg['augmentation']}")
-        transforms = augmemtation_transforms(cfg["augmentation"])
-        _transform_fn = partial(transform_fn, transforms=transforms)
-        dataset.set_transform(_transform_fn)
-
     return dataset
 
 
@@ -235,24 +153,12 @@ def collate_fn(batch, tokenizer, image_processor):
             )
         )
 
-    # # add "image_path" in input_json_file_load if necessary
-    # output_batch["image_path"] = [item["image_path"] for item in batch]
-
     return output_batch
 
 
 # text tokenize function
 def tokenize_batch(tokenizer, batch, truncation=True, padding=True, max_length=None):
     outputs = {}
-
-    if batch[0].get("findings_clean"):
-        outputs["encoded_findings"] = tokenizer(
-            [i["findings_clean"] for i in batch],
-            padding=padding,
-            truncation=truncation,
-            max_length=max_length,
-            return_tensors="pt",
-        )
 
     if batch[0].get("key_phrases"):
         outputs["encoded_random_key_phrases"] = tokenizer(
@@ -274,39 +180,5 @@ def tokenize_batch(tokenizer, batch, truncation=True, padding=True, max_length=N
             for i in batch
         ]
 
-    if batch[0].get("negative_existence"):
-        outputs["encoded_negative_phrases"] = [
-            tokenizer(
-                i["negative_existence"]
-                + i["negative_position"]
-                + i["negative_finding"],
-                padding=padding,
-                truncation=truncation,
-                max_length=max_length,
-                return_tensors="pt",
-            )
-            for i in batch
-        ]
-
     return outputs
 
-
-if __name__ == "__main__":
-    import yaml
-
-    cfg_path = "exp/cxr_pt/pt/config.yaml"
-
-    with open(cfg_path, "r") as file:
-        cfg = yaml.safe_load(file)
-
-    dataset = load_datasets(cfg["dataset"], train=True, inference=False)
-
-    batch_size = 4
-    processed_batches = []
-    for split, dataset_split in dataset.items():
-        print(f"split: {split}")
-        for i in tqdm(range(0, len(dataset_split), batch_size)):
-            batch = dataset_split[i : i + batch_size]
-            # processed_batch = transform(batch, cfg["dataset"])
-
-            # processed_batches.append(processed_batch)

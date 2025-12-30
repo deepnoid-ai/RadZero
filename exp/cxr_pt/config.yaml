@@ -50,11 +50,6 @@ dataset:
   MS_CXR_test: MS-CXR-0.1/preprocess/v2.0/test.json
 
   use_frontal_view_only: False
-  use_radgrpah_key_phrase: False
-  use_negative_phrases: False
-
-  augmentation:
-    apply: False
 
 inference:
   batch_size: 64
