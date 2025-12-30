@@ -14,10 +14,6 @@ from exp.cxr_pt.inference.segmentation_utils import (
     eval_segmentation_siim,
 )
 from exp.cxr_pt.inference.utils import eval_classification, get_infer_dirs
-from exp.cxr_pt.inference.visualize_utils import (
-    get_attention_weights,
-    save_attention_map,
-)
 
 
 class Inference:
@@ -172,47 +168,6 @@ class Inference:
         except Exception as e:
 
             print(f"Error in zero shot segmentation: {e}\n{traceback.format_exc()}")
-
-    def visualization(
-        self,
-        model,
-        image_processor,
-        tokenizer,
-        save_root_dir,
-        text_prompts,
-        image_paths=None,
-        bboxes=None,
-        masks=None,
-    ):
-        os.makedirs(save_root_dir, exist_ok=True)
-        if image_paths is None:
-            image_paths = list()
-            dir_dict = get_infer_dirs(self.data_root_dir)
-            for sel_d in self.det_dataset:
-                sel_d_dirs = dir_dict[sel_d]
-                df = pd.read_csv(sel_d_dirs["image_path"])
-                image_paths.extend(df["Path"].tolist())
-
-        attention_weights = get_attention_weights(
-            model,
-            image_processor,
-            tokenizer,
-            self.batch_size,
-            self.num_workers,
-            self.data_root_dir,
-            image_paths,
-            text_prompts,
-        )
-
-        save_attention_map(
-            attention_weights,
-            image_paths,
-            self.data_root_dir,
-            save_root_dir,
-            image_processor,
-            bboxes,
-            masks,
-        )
 
 
 if __name__ == "__main__":

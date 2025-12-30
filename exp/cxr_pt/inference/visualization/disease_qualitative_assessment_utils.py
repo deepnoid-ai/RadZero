@@ -147,8 +147,8 @@ def draw_disease_bboxes(
             x_max = max(0, min(x_max, image_width))
             y_max = max(0, min(y_max, image_height))
 
-            class_index = j  
-            color = bbox_colors[class_index]  
+            class_index = j
+            color = bbox_colors[class_index]
 
             rect = plt.Rectangle(
                 (x_min, y_min),

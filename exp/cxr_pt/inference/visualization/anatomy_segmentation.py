@@ -8,11 +8,11 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 
-from exp.cxr_pt.inference.qalitative_assessment.qualitative_assessment_utils import (
-    visualize_segmap,
-)
 from exp.cxr_pt.inference.segmentation_utils import interpolate_similarity_scores
 from exp.cxr_pt.inference.utils import load_pretrained_model
+from exp.cxr_pt.inference.visualization.qualitative_assessment_utils import (
+    visualize_segmap,
+)
 
 
 def extract_similarity_map(image_path, text, model, image_processor, tokenizer):
@@ -109,9 +109,7 @@ if __name__ == "__main__":
     dpi = 100
     overlay_alpha = 0.8
 
-    checkpoint_dir = os.path.join(
-        experiment_root, "125_batch_256/checkpoint-17927"
-    )
+    checkpoint_dir = os.path.join(experiment_root, "125_batch_256/checkpoint-17927")
 
     model, image_processor, tokenizer = load_pretrained_model(
         checkpoint_dir,
@@ -198,9 +196,7 @@ if __name__ == "__main__":
             position_list = lateral_position_list
 
         position_list = [f"There is {pos}" for pos in position_list]
-        shutil.copy(
-            image_path, os.path.join(save_dir, os.path.basename(image_path))
-        )
+        shutil.copy(image_path, os.path.join(save_dir, os.path.basename(image_path)))
         process_and_visualize_segmentation(
             image_path,
             position_list.copy(),

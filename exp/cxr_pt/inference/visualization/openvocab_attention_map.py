@@ -77,8 +77,8 @@ def process_and_visualize_map(
 
     sim_map_blurred = cv2.GaussianBlur(sim_map_resized, (5, 5), sigmaX=0)
 
-    cmap = plt.get_cmap("inferno") 
-    
+    cmap = plt.get_cmap("inferno")
+
     sim_map_colored = cmap(sim_map_blurred)
 
     sim_map_colored[..., 3] = sim_map_blurred * alpha
@@ -284,9 +284,7 @@ if __name__ == "__main__":
     alpha = 0.2
     width = 3
 
-    checkpoint_dir = os.path.join(
-        experiment_root, "125_batch_256/checkpoint-17927"
-    )
+    checkpoint_dir = os.path.join(experiment_root, "125_batch_256/checkpoint-17927")
 
     model, image_processor, tokenizer = load_pretrained_model(
         checkpoint_dir,
@@ -395,10 +393,10 @@ if __name__ == "__main__":
         "right lower",
     ]
 
-    gt_json_path = os.path.join(data_root, "CarZero/preprocess/ChestXDet10/test.json")
+    gt_json_path = os.path.join(data_root, "ChestXDet10/test.json")
     gt_json = load_json(gt_json_path)
 
-    abnormal_type = "abnormal_data"  
+    abnormal_type = "abnormal_data"
     type_abnormal_syms_list = [
         "This is a normal case.",
         "The lungs are clear.",
@@ -422,12 +420,8 @@ if __name__ == "__main__":
         "There is atelectasis",
     ]
 
-    openvocab_abnormal_save_dir = (
-        f"125model/openvocab/{abnormal_type}"
-    )
-    openvocab_normal_save_dir = (
-        f"125model/openvocab/{normal_type}"
-    )
+    openvocab_abnormal_save_dir = f"125model/openvocab/{abnormal_type}"
+    openvocab_normal_save_dir = f"125model/openvocab/{normal_type}"
 
     os.makedirs(openvocab_abnormal_save_dir, exist_ok=True)
     os.makedirs(openvocab_normal_save_dir, exist_ok=True)
@@ -449,9 +443,7 @@ if __name__ == "__main__":
     """
     """
     # left right
-    left_right_save_dir = (
-        "125model/left_right_attention"
-    )
+    left_right_save_dir = "125model/left_right_attention"
     os.makedirs(left_right_save_dir, exist_ok=True)
 
     process_left_right_prompt(

@@ -11,11 +11,11 @@ from torch.nn import functional as F
 from tqdm import tqdm
 
 from common.utils import load_json
-from exp.cxr_pt.inference.qalitative_assessment.qualitative_assessment_utils import (
-    visualize_segmap,
-)
 from exp.cxr_pt.inference.segmentation_utils import interpolate_similarity_scores
 from exp.cxr_pt.inference.utils import load_pretrained_model
+from exp.cxr_pt.inference.visualization.qualitative_assessment_utils import (
+    visualize_segmap,
+)
 
 
 def extract_similarity_map(image_path, text, model, image_processor, tokenizer):
@@ -189,9 +189,7 @@ if __name__ == "__main__":
     alpha = 0.2
     width = 3
 
-    checkpoint_dir = os.path.join(
-        experiment_root, "125_batch_256/checkpoint-17927"
-    )
+    checkpoint_dir = os.path.join(experiment_root, "125_batch_256/checkpoint-17927")
 
     model, image_processor, tokenizer = load_pretrained_model(
         checkpoint_dir,
@@ -206,7 +204,7 @@ if __name__ == "__main__":
         )[-1],
     )
 
-    gt_json_path = os.path.join(data_root, "CarZero/preprocess/ChestXDet10/test.json")
+    gt_json_path = os.path.join(data_root, "ChestXDet10/test.json")
     gt_json = load_json(gt_json_path)
 
     save_dir = f"125model/disease_attention_map_final/{type}_"

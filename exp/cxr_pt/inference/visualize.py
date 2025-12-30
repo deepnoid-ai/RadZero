@@ -67,11 +67,9 @@ if __name__ == "__main__":
         # TODO: use get_infer_dirs
         image_csv = os.path.join(
             data_root_dir,
-            "CarZero/preprocess/ChestXDet10/chestXDet10_test_image_ours.csv",
+            "ChestXDet10/chestXDet10_test_image.csv",
         )
-        text_path = os.path.join(
-            data_root_dir, "CarZero/preprocess/ChestXDet10/test.json"
-        )
+        text_path = os.path.join(data_root_dir, "ChestXDet10/test.json")
 
         image = pd.read_csv(image_csv)
         image_list = image["Path"].tolist()
