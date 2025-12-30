@@ -80,7 +80,7 @@ class Inference:
                     image_path = det_d_dirs["image_path"]
                     text_path = det_d_dirs["text_path"]
                     test_path = os.path.join(
-                        self.data_root_dir, "CarZero/preprocess/ChestXDet10/test.json"
+                        self.data_root_dir, "ChestXDet10/test.json"
                     )
 
                     result["ChestXDet10"] = chestXDet10_eval_grounding(
