@@ -116,8 +116,31 @@ if __name__ == "__main__":
 
 ### Download dataset
 
+**Training**
+
 - **MIMIC-CXR (preprocessed JSON used in RadZero)**  
   - Hugging Face: [`Deepnoid/RadZero` – `data/MIMIC-CXR`](https://huggingface.co/Deepnoid/RadZero/tree/main/data/MIMIC-CXR)
+
+**Evaluation**
+
+All evaluation benchmarks used in the paper are provided under the `data/` directory of the Hugging Face repo:  
+[`Deepnoid/RadZero` – `data/`](https://huggingface.co/Deepnoid/RadZero/tree/main/data)
+
+- **Zero-shot classification datasets**
+  - `OpenI`
+  - `PadChest`
+  - `Chexpert`
+  - `ChestXray14`
+  - `ChestXDet10`
+
+- **Zero-shot grounding datasets**
+  - `ChestXDet10`
+  - `MS-CXR`
+
+- **Zero-shot segmentation datasets**
+  - `SIIM`
+  - `RSNA`
+
 
 ### Run Command
 1. Set the appropriate data and output paths for your environment in `exp/cxr_pt/configs/paths.yaml`.
